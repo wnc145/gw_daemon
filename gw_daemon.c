@@ -14,24 +14,25 @@
 #include <sys/ioctl.h>  
 #include <linux/if.h>  
 
+#define  TargetProcName	"gw7688"
 
-int GetTargetProccesState(char *proc)
+
+int GetTargetProccesState(void)
 {
 	FILE    *read_fp;  
 	char    buffer[50], _cmd[128];
 	size_t  len;
 	memset( (void*)buffer, 0, 50 ); 
 
-	sprintf(_cmd, "ps | grep %s | grep -v grep", proc);
-
+	sprintf(_cmd, "ps | grep %s | grep -v grep", TargetProcName);
 	read_fp = popen(_cmd, "r");
 	if (read_fp != NULL)
 	{
-		len = fread((void*)buffer, sizeof(char), 50, read_fp);  
+		len = fread(buffer, sizeof(char), 50, read_fp);  
 		if (strlen(buffer) == 0)
 		{
-			printf("%s restart .\n", proc);
-			sprintf(_cmd,"%s &", proc);
+			printf("%s restart .\n", TargetProcName);
+			sprintf(_cmd,"%s &", TargetProcName);
 			system(_cmd);
 		}
 		pclose(read_fp);
@@ -47,19 +48,10 @@ int GetTargetProccesState(char *proc)
 int main(int argc, char **argv) 
 {
 	struct stat tst;
-	char target_proc[32] = {0};
-
-	if(argc < 2)
-	{
-		printf("please input target process \n");
-		return 0;
-	}
-	
-	strcpy(target_proc, argv[1]);
 
  	while(1)
 	{
-		GetTargetProccesState(target_proc);
+		GetTargetProccesState();
 		sleep(3);
 	}
 

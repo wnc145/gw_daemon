@@ -1,5 +1,5 @@
 PWD     	:= $(shell pwd)
-TARGET		?=
+TARGET		?= mipsel-openwrt-linux
 CROSS_COMPILE   ?= $(TARGET)-
 CPP     	:= $(CROSS_COMPILE)g++
 CC      	:= $(CROSS_COMPILE)gcc
